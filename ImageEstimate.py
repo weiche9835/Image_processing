@@ -67,19 +67,22 @@ def Calssim(gray,gray2):
     return ans
 
 @jit
-def psnrmse(gray,gray2):
-    ans = 0
-    for i in range(gray.shape[0]):
-        for j in range(gray.shape[1]):
-            ans = ans + (gray[i][j] - gray2[i][j])**2
-    ans = ans/(gray.shape[0]*gray.shape[1])
-    return ans
+def Calmse(gray,gray2):
+    if(gray.shape[0]==gray2.shape[0]) and (gray.shape[1]==gray2.shape[1]):
+        ans = 0
+        for i in range(gray.shape[0]):
+            for j in range(gray.shape[1]):
+                ans = ans + (gray[i][j] - gray2[i][j])**2
+        ans = ans/(gray.shape[0]*gray.shape[1])
+        return ans
+    else:
+        raise BaseException("Images are different size")
 
 def Calpsnr(gray,gray2):
     if(gray.shape[0]==gray2.shape[0]) and (gray.shape[1]==gray2.shape[1]):
         gray = cv2.cvtColor(gray,cv2.COLOR_BGR2GRAY)
         gray2 = cv2.cvtColor(gray2,cv2.COLOR_BGR2GRAY)
-        mse = psnrmse(gray,gray2)
+        mse = Calmse(gray,gray2)
         if mse ==0:
             return float("inf")
         else:
@@ -87,3 +90,9 @@ def Calpsnr(gray,gray2):
             return 10*math.log(ans,10)
     else:
         raise BaseException("Images are different size")
+
+
+
+if __name__ == '__main__':
+    print("This is for images' psnr and ssim")
+
